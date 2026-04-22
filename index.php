@@ -379,7 +379,7 @@ ob_end_flush();
 
   @media (max-width: 640px) {
     .spe-title-wid h2:first-child {
-      font-size: 20px !important;
+      font-size: 15px !important;
     }
 
     .spe-title-wid h2:last-child {
@@ -401,14 +401,14 @@ ob_end_flush();
     <div class="booking-bg-1">
       <div class="bg-book" style="padding-top: 10px !important;">
         <div class="text-center spe-title-wid">
-          <h2 style="font-size: 20px !important;">Gymnasts Association of Karnataka </h2>
+          <h2 style="font-size: 15px !important;">Gymnasts Association of Karnataka </h2>
           <h2 style="font-size: 10px !important;"><?php echo $eventname; ?> </h2>
         </div>
         <div class="row" align="center"> <strong><?php echo $msg; ?></strong></div>
         <div class="book-form">
           <form class="form-horizontal" id="commentForm" action="index.php" method="post" enctype="multipart/form-data">  
            <div class="card-header">
-              <h3 style="font-size: 20px !important;">Event Information</h3>
+              <h3 style="font-size: 15px !important;">Event Information</h3>
             </div> 
              <div id="name" class="form-group ">
               <label>Name</label>
@@ -449,7 +449,7 @@ ob_end_flush();
               </div>
             </div>       
             <div class="card-header">
-              <h3 style="font-size: 20px !important;">Details of Gymnast</h3>
+              <h3 style="font-size: 15px !important;">Details of Gymnast</h3>
             </div>
             <div class="form-group row">
               <div class="col-lg-5">
@@ -614,7 +614,7 @@ ob_end_flush();
               </div>
             </div> -->
              <div class="card-header">
-              <h3 style="font-size: 20px !important;">Details of the section trial at which participation is requested</h3>
+              <h3 style="font-size: 15px !important;">Details of the selection trial at which participation is requested</h3>
             </div>
             <div class="form-group row">
               <div class="col-lg-5">
