@@ -15,7 +15,7 @@ composer.lock
 .env.backup
 config/local.php
 config/*.local.php
-
+.htaccess
 
 # ===========================
 # Uploads & Generated Files
