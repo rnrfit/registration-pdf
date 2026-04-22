@@ -105,12 +105,12 @@ $comm = new Common();
         <div class="i-head row">
             <!-- TOP CONTACT INFO -->
             <div class="i-head-left i-head-com col-md-6">
-                <ul>
+                <!-- <ul>
                     <li><a href="#">phone: +91 9632961700</a>
                     </li>
                     <li><a href="#">Email: info@rnrfit.com</a>
                     </li>
-                </ul>
+                </ul> -->
             </div>
             <!-- TOP FIXED MENU -->
             <div class="i-head-right i-head-com col-md-6 col-sm-12 col-xs-12">

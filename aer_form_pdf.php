@@ -92,7 +92,7 @@ if (file_exists($gakLogo)) {
 }
 
 // Right logo (GFI / KOA etc.) — adjust path as needed
-$gfiLogo = 'assets/images/gfi.jpg';
+$gfiLogo = 'assets/images/logo.png';
 if (file_exists($gfiLogo)) {
     $pdf->Image($gfiLogo, 182, 10, 18, 18, 'JPG');
 }
