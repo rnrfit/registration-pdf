@@ -2,14 +2,19 @@
 ob_start();
 include 'controls/header.php';
 include('inc/Participant.php');
-ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL); 
+include('inc/Event.php');
+//ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL); 
 $participant = new Participant();
+$event = new Event();
+$eventid = 89;
 $all_districts=$participant->all_district('17');
-
+$eventdata=$event->geteventsbyid($eventid);
+$eventname = !empty($eventdata) && isset($eventdata[0]['Name']) ? $eventdata[0]['Name'] : '';
+$eventdate = (!empty($eventdata) && !empty($eventdata[0]['EventDate'])) ? date("jS F Y", strtotime($eventdata[0]['EventDate'])) : 'To Be Announced';
 $eventtype = "";
 $msg = "";
 $gender = '';
-$eventid = 42;
+
 $category = '';
 $apid = 0;
 $i = 0;
@@ -21,18 +26,18 @@ if (!empty($_POST)) {
   if (empty($_POST['name'])) {
     $msg = "Please Enter at least one participant name.";
   } else {
-    $comm->objdb->checkPostInputVariables('email', 'TEXT', 'aer.php', 50);
-    $comm->objdb->checkPostInputVariables('city', 'TEXT', 'aer.php', 20);
-    $comm->objdb->checkPostInputVariables('phone', 'TEXT', 'aer.php', 10);
-    $comm->objdb->checkPostInputVariables('name', 'TEXT', 'aer.php', 50);
+    $comm->objdb->checkPostInputVariables('email', 'TEXT', 'index.php', 50);
+    $comm->objdb->checkPostInputVariables('city', 'TEXT', 'index.php', 20);
+    $comm->objdb->checkPostInputVariables('phone', 'TEXT', 'index.php', 10);
+    $comm->objdb->checkPostInputVariables('name', 'TEXT', 'index.php', 50);
 
     
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $contingent = '';
-    $Event = 44;
+    $Event = $eventid;
     $datepaid = '';
-    $txnid = 'AER_';
+    $txnid = 'GAK_';
     $txnid .= mt_rand(99999, 999999);
     if (!empty($_POST)) {
      
@@ -70,7 +75,7 @@ if (!empty($_POST)) {
         $club = '';
         $artistic = '';
         $rhythmic = '';
-        $aerobic = '1';
+        $aerobic = '0';
         $acrobatic = '';
         $photo = '';
         $city = $_POST['city'];
@@ -91,7 +96,7 @@ if (!empty($_POST)) {
                 //upload here
                 $temp = explode(".", $_FILES["photo"]["name"]);
                 $newfilename = $reg_id . '_p.'. end($temp);
-                $target = "assets/aer/" . $newfilename;
+                $target = "assets/gak/" . $newfilename;
               
                 if(move_uploaded_file($_FILES['photo']['tmp_name'], $target))
                 {
@@ -100,7 +105,7 @@ if (!empty($_POST)) {
 
                 $temp1 = explode(".", $_FILES["idproof"]["name"]);
                 $tname = $reg_id . '_i.' . end($temp1);
-                $target1 = "assets/aer/" . $tname;
+                $target1 = "assets/gak/" . $tname;
 
                 if(move_uploaded_file($_FILES['idproof']['tmp_name'], $target1))
                 {
@@ -127,9 +132,269 @@ if (!empty($_POST)) {
 ob_end_flush();
 ?>
 <style type="text/css">
-    .form-control{
-        color: #000000 !important;
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap');
+
+  :root {
+    --reg-bg-start: #fff4df;
+    --reg-bg-end: #e8f6ff;
+    --reg-accent: #d95f02;
+    --reg-accent-dark: #a84a06;
+    --reg-heading: #17263c;
+    --reg-text: #334155;
+    --reg-muted: #64748b;
+    --reg-border: #d7e3ef;
+    --reg-surface: rgba(255, 255, 255, 0.9);
+    --reg-focus: rgba(217, 95, 2, 0.2);
+    --reg-shadow: 0 18px 45px rgba(23, 38, 60, 0.14);
+  }
+
+  .booking-bg-s.lp {
+    padding: 28px 0 42px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .booking-bg-s.lp::before,
+  .booking-bg-s.lp::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    opacity: 0.25;
+    pointer-events: none;
+  }
+
+  .booking-bg-s.lp::before {
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, #ffbf69 0%, rgba(255, 191, 105, 0) 70%);
+    top: -60px;
+    left: -90px;
+  }
+
+  .booking-bg-s.lp::after {
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, #4ea8de 0%, rgba(78, 168, 222, 0) 72%);
+    bottom: -120px;
+    right: -120px;
+  }
+
+  .booking-bg-1 {
+    position: relative;
+    z-index: 1;
+  }
+
+  .bg-book {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 20px 28px 28px !important;
+    border-radius: 22px;
+    background: linear-gradient(145deg, var(--reg-bg-start), var(--reg-bg-end));
+    box-shadow: var(--reg-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    animation: regFadeIn 0.7s ease;
+  }
+
+  .spe-title-wid {
+    margin-bottom: 18px;
+  }
+
+  .spe-title-wid h2 {
+    margin: 0;
+  }
+
+  .spe-title-wid h2:first-child {
+    font-family: 'Sora', sans-serif;
+    color: var(--reg-heading);
+    letter-spacing: 0.5px;
+    font-size: 30px !important;
+    line-height: 1.2;
+  }
+
+  .spe-title-wid h2:last-child {
+    font-family: 'Outfit', sans-serif;
+    color: var(--reg-accent-dark);
+    margin-top: 6px;
+    font-size: 15px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .book-form {
+    margin-top: 8px;
+    background: var(--reg-surface);
+    border-radius: 16px;
+    padding: 20px 18px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+
+  .row[align="center"] strong {
+    display: inline-block;
+    margin: 6px 0 16px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.78);
+    color: #0f172a;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07);
+  }
+
+  .card-header {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 14px 0 12px;
+  }
+
+  .card-header h3 {
+    font-family: 'Sora', sans-serif;
+    color: var(--reg-heading);
+    font-size: 18px !important;
+    border-left: 5px solid var(--reg-accent);
+    padding-left: 12px;
+    margin: 0;
+  }
+
+  #commentForm {
+    font-family: 'Outfit', sans-serif;
+    color: var(--reg-text);
+  }
+
+  #commentForm .form-group {
+    margin-bottom: 16px;
+  }
+
+  #commentForm label {
+    color: var(--reg-heading);
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: inline-block;
+  }
+
+  .form-control {
+    color: #0f172a !important;
+    background: #ffffff;
+    border: 1px solid var(--reg-border);
+    border-radius: 10px;
+    min-height: 44px;
+    padding: 10px 12px;
+    box-shadow: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .form-control:focus {
+    border-color: var(--reg-accent);
+    box-shadow: 0 0 0 4px var(--reg-focus);
+    transform: translateY(-1px);
+  }
+
+  input[type="file"].form-control {
+    width: 100% !important;
+    padding: 8px 12px;
+    min-height: 46px;
+    background: #ffffff;
+  }
+
+  .btn.btn-primary {
+    background: linear-gradient(135deg, var(--reg-accent), #f48c06);
+    border-color: transparent;
+    border-radius: 12px;
+    min-width: 170px;
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 11px 22px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  }
+
+  .btn.btn-primary:hover,
+  .btn.btn-primary:focus {
+    filter: brightness(0.95);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(217, 95, 2, 0.28);
+  }
+
+  #commentForm .form-group {
+    animation: regSlideUp 0.45s ease both;
+  }
+
+  #commentForm .form-group:nth-of-type(2) { animation-delay: 0.03s; }
+  #commentForm .form-group:nth-of-type(3) { animation-delay: 0.06s; }
+  #commentForm .form-group:nth-of-type(4) { animation-delay: 0.09s; }
+  #commentForm .form-group:nth-of-type(5) { animation-delay: 0.12s; }
+
+  .event-date-box {
+    min-height: 44px;
+    border: 1px dashed #f6b26b;
+    background: linear-gradient(135deg, #fff8ec, #ffffff);
+    border-radius: 10px;
+    padding: 10px 12px;
+    line-height: 1.2;
+  }
+
+  .event-date-box .event-date-label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--reg-muted);
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
+  }
+
+  .event-date-box .event-date-value {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--reg-heading);
+  }
+
+  @keyframes regFadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes regSlideUp {
+    from { opacity: 0; transform: translateY(7px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 991px) {
+    .bg-book {
+      padding: 16px 14px 20px !important;
+      border-radius: 16px;
     }
+
+    .book-form {
+      padding: 14px 12px 10px;
+    }
+
+    .spe-title-wid h2:first-child {
+      font-size: 24px !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .spe-title-wid h2:first-child {
+      font-size: 20px !important;
+    }
+
+    .spe-title-wid h2:last-child {
+      font-size: 12px !important;
+    }
+
+    .btn.btn-primary {
+      width: 100%;
+      min-width: 100%;
+    }
+
+    .col-sm-10 {
+      width: 100%;
+    }
+  }
 </style>
 <section>
   <div class="booking-bg-s lp">
@@ -137,7 +402,7 @@ ob_end_flush();
       <div class="bg-book" style="padding-top: 10px !important;">
         <div class="text-center spe-title-wid">
           <h2 style="font-size: 20px !important;">Gymnasts Association of Karnataka </h2>
-          <h2 style="font-size: 10px !important;">State Aerobics Gymnasts Selection 2022 </h2>
+          <h2 style="font-size: 10px !important;"><?php echo $eventname; ?> </h2>
         </div>
         <div class="row" align="center"> <strong><?php echo $msg; ?></strong></div>
         <div class="book-form">
@@ -356,11 +621,7 @@ ob_end_flush();
                <label>Venue/City</label>
               <input type="text" class="form-control" id="city" placeholder="City" name="city" required onkeypress="return (event.charCode === 32) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="Bengaluru" maxlength="20" minlength="2" />
               </div>
-              <div class="col-lg-6">
-                <label>Date</label>
-                  <label>20th March 2022</label>
-              <!-- <input type="date" class="form-control" id="edate" placeholder="edate" name="edate" required /> -->
-              </div>
+            
             </div>
             <div class="form-group ">
               <label>Accompanying the Gymnast:</label>
@@ -368,11 +629,11 @@ ob_end_flush();
             </div>
             <div class="form-group ">
               <label>Photo Upload:</label>
-              <input type="file" class="form-control" name="photo" style="width:200px"/>
+              <input type="file" class="form-control" name="photo"/>
             </div>
             <div class="form-group ">
               <label>Id Proof:</label>
-              <input type="file" class="form-control" name="idproof" style="width:200px"/>
+              <input type="file" class="form-control" name="idproof"/>
             </div>
             <div class="form-group">
               <div class=" col-sm-10">

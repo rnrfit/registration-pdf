@@ -78,6 +78,9 @@ $comm = new Common();
                     <a href="/" class="menu-lef-act"><img src="assets/images/icon/s1.png" alt=""> Home</a>
                 </li>
                 <li>
+                    <a href="index.php">GAK</a>
+                </li>
+                <li>
                     <a href="bga_register.php">Bengaluru Gymnast Association</a>
                 </li>
                 <li>

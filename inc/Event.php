@@ -20,6 +20,18 @@ class Event {
 		}
 	}
 
+	public function geteventsbyid($event_id){	
+	try {
+			$stmt = $this->_db->prepare("SELECT * FROM `events` where id = '$event_id'");
+			$stmt->execute(array());			
+			$row = $stmt->fetchAll();			
+			return $row;
+		} 
+		catch(PDOException $e) {
+		    echo '<p class="bg-danger">'.$e->getMessage().'</p>';
+		}
+	}
+
 	public function isExist($event_id){
 		try {
 			$stmt = $this->_db->prepare("SELECT * FROM `events` where id = '$event_id'");
